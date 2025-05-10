@@ -1,35 +1,45 @@
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    <title>Best store!</title>
-    <script type="text/javascript" src="/static/update.js"></script>
-    <link href="static/store.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио разработчика</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <h1>Furniture store:</h1>
-    <h3>Add new product:</h3>
-    <form>
-        <div>
-            <input type="text" name="prod_name" id="prod_name">
-            <label for="prod_name">Product name</label>
-        </div>
-        <div>
-            <input type="number" name="price" id="price">
-            <label for="price">Price (rub.)</label>
-        </div>
-        <button onClick="addProduct()">Add</button>
-    </form>
-    <ul>
-        {% for product in products_list %}
-        <li>
-            <div>
-                <div>{{ product['prod_name'] }}</div>
-                <div>{{ product['price'] }} rub.</div>
-                <input value="{{product['id']}}" onChange="updateProd(this)" name="in_stock" type="checkbox" {% if product.in_stock %} checked {% endif %}>
-                <label for="in_stock">In stock</label>
+    <div class="container">
+        <header>
+            <h1>Портфолио разработчика</h1>
+        </header>
+
+        <form method="POST">
+            <h2>Добавить проект</h2>
+            <div class="form-group">
+                <label for="title">Название проекта:</label>
+                <input type="text" id="title" name="title" required>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
+            <div class="form-group">
+                <label for="link">Ссылка на репозиторий:</label>
+                <input type="url" id="link" name="link" required>
+            </div>
+            <button type="submit">Добавить</button>
+        </form>
+
+        <div class="projects">
+            <h2>Мои проекты</h2>
+            {% if projects %}
+                <ul>
+                    {% for project in projects %}
+                        <li>
+                            <a href="{{ project.link }}" target="_blank">{{ project.title }}</a>
+                            <a href="{{ url_for('delete_project', id=project.id) }}" class="delete">Удалить</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Пока нет добавленных проектов</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
